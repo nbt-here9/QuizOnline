@@ -1,0 +1,8 @@
+=login.jsp
+LoginPage=login.jsp
+Login=LoginServlet
+RegistrationPage=registration.jsp
+Registration=RegistrationServlet
+LogOut=LogOutServlet
+AdminPage=admin.jsp
+DashBoard=dashboard.jsp
