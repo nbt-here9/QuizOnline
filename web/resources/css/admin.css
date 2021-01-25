@@ -1,0 +1,31 @@
+
+.page-item.active .page-link{
+    background-color: #dda1c7 !important;
+}
+
+.page-link {
+    border-radius: 50px !important;
+    margin-right: 10px;
+    padding: 5px 15px !important;
+}
+
+/*.admin tbl {
+    background-color: #d6f9ff !important;
+}*/
+tbody{
+    border-color: #ffffff!important;
+    background-color: #cfdac8 !important;
+}
+
+.table .thead-light th {
+    color: #ffffff !important;
+    background-color: #28a745 !important;
+    border-color: #28a745 !important;
+    font-size: 13px;
+}
+
+/*tr::first-child{
+    width: 30px;
+    background-color: #7c9473;
+}*/
+

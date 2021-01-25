@@ -13,6 +13,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import thunb.utils.ConstantsKey;
 
 /**
@@ -35,7 +36,10 @@ public class LogOutServlet extends HttpServlet {
         
         String url = ConstantsKey.LOGIN_PAGE;
         try {
-           
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                session.invalidate();
+            }
         } finally {
         response.sendRedirect(url);
         }

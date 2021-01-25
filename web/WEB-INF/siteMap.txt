@@ -6,3 +6,6 @@ Registration=RegistrationServlet
 LogOut=LogOutServlet
 AdminPage=admin.jsp
 DashBoard=dashboard.jsp
+Search=SearchServlet
+CreatePage=createQuestion.jsp
+Create=CreateQuestionServlet

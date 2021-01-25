@@ -62,7 +62,7 @@
                                         <c:if test="${not empty requestScope.ERROR.confirmNotMatchedErr}">
                                             <font style="color: red">${requestScope.ERROR.confirmNotMatchedErr}</font>
                                         </c:if>
-                                        <button class="btn btn-lg btn-warning btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit">Registration</button>
+                                        <button class="btn btn-lg btn-success btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit">Registration</button>
                                     </form>
                                 </div>
                             </div>
