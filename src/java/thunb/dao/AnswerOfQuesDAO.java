@@ -87,7 +87,7 @@ public class AnswerOfQuesDAO {
                         + "FROM AnswerOfQues WHERE quesID = ? ";
                 pst = cn.prepareStatement(sql);
                 pst.setInt(1, quesID);
-                
+
                 rs = pst.executeQuery();
 
                 while (rs.next()) {
@@ -108,5 +108,34 @@ public class AnswerOfQuesDAO {
         }
 
         return result;
+    }
+
+    public boolean updateAnswerOfQuestion(Connection cn, int quesID, List<AnswerOfQuesDTO> list)
+            throws SQLException, NamingException {
+        PreparedStatement pst = null;
+
+        try {
+            if (cn != null) {
+                String sql = "UPDATE AnswerOfQues SET ansContent = ?, isTrue = ? WHERE ansID = ?";
+
+                pst = cn.prepareStatement(sql);
+                if (list != null && !list.isEmpty()) {
+                    
+                    for (AnswerOfQuesDTO ans : list) {
+                        pst.setNString(1, ans.getAnsContent());
+                        pst.setBoolean(2, ans.isIsTrue());
+                        pst.setInt(3, ans.getAnsID());
+                        pst.executeUpdate();
+                    }
+
+                    return true;
+                }
+            }
+        } finally {
+            if (pst != null) {
+                pst.close();
+            }
+        }
+        return false;
     }
 }

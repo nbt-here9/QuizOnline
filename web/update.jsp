@@ -1,6 +1,6 @@
 <%-- 
-    Document   : createquestion
-    Created on : Jan 24, 2021, 8:02:08 PM
+    Document   : update
+    Created on : Jan 26, 2021, 8:18:30 AM
     Author     : Banh Bao
 --%>
 
@@ -10,13 +10,14 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="resources/css/jquery-ui.css">
         <link rel="stylesheet" type="text/css" href="resources/css/admin.css">
-        <title>Create Question</title>
+        <title>Update Question</title>
     </head>
     <body>
         <jsp:include page="WEB-INF/header/header.jsp" flush="true"/>
-        <h1 class="text-center text-muted" style="padding-bottom: 20px">Create Question</h1>
+        <h1 class="text-center text-muted" style="padding-bottom: 20px">Update Question</h1>
 
 
         <c:if test="${not empty requestScope.CREATE_ERR}">
@@ -44,7 +45,7 @@
 
 
 
-        <form action="Create" method="POST" style="width: 700px; margin: 0 auto">
+        <form action="Update" method="POST" style="width: 700px; margin: 0 auto">
             <div class="text-center text-muted">
                 <div class="row mb-4">
                     <div class="col-md-6 form-group mb-0">
@@ -52,7 +53,7 @@
                             <option></option>
                             <c:forEach var="subject" items="${requestScope.SUBJECT_LIST}">
                                 <option 
-                                    <c:if test="${param.txtSubject eq subject.subjectName}">
+                                    <c:if test="${requestScope.SUBJECT_NAME eq subject.subjectName}">
                                         selected="true"
                                     </c:if>>
                                     ${subject.subjectName}
@@ -65,7 +66,7 @@
                             <option></option>
                             <c:forEach var="status" items="${requestScope.STATUS_LIST}">
                                 <option 
-                                    <c:if test="${param.txtStatus eq status}">
+                                    <c:if test="${requestScope.STATUS eq status}">
                                         selected="true"
                                     </c:if>>
                                     ${status}
@@ -81,6 +82,7 @@
             <div class="text-center text-muted">
                 <strong>Question: </strong><br>
                 <textarea name="txtQuestion" rows="4" cols="90">${requestScope.QUES.quesContent}</textarea>
+                <input type="hidden" name="txtQuestionID" value="${requestScope.QUES_ID}" />
             </div>
             <br>
 
@@ -91,42 +93,36 @@
                             <th>Answer <br>
                                 Correct</th>
                             <th class="text-center">Answer Content</th>
+                            <th>Update</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td width="8%">
-                                <input type="radio" name="rdAnsCorrect" value="1" />
-                            </td>
-                            <td><input type="text" name="txtAns1" value="${param.txtAnsA}" style="width: 550px"/></td>
-                        </tr>
-                        <tr>
-                            <td width="8%">
-                                <input type="radio" name="rdAnsCorrect" value="2" />
-                            </td>
-                            <td><input type="text" name="txtAns2" value="${param.txtAnsB}" style="width: 550px"/></td>
-                        </tr>
-                        <tr>
-                            <td width="8%">
-                                <input type="radio" name="rdAnsCorrect" value="3" />
-                            </td>
-                            <td><input type="text" name="txtAns3" value="${param.txtAnsC}" style="width: 550px"/></td>
-                        </tr>
-                        <tr>
-                            <td width="8%">
-                                <input type="radio" name="rdAnsCorrect" value="4" />
-                            </td>
-                            <td><input type="text" name="txtAns4" value="${param.txtAnsD}" style="width: 550px"/></td>
-                        </tr>
+                        <c:forEach var="answer" items="${requestScope.ANS_LIST}" varStatus="counter">
+                            <tr>
+                                <td width="8%">
+                                    <c:if test="${answer.isTrue}">
+                                        <i class="material-icons">check</i>
+                                    </c:if>
+
+                                    <c:if test="${not answer.isTrue}">
+                                        <i class="material-icons">clear</i>
+                                    </c:if>
+                                </td>
+                                <td><input type="text" name="txtAns${counter.count}" value="${answer.ansContent}" style="width: 550px"/></td>
+                                <td width="8%">
+                                    <input type="radio" name="rdAnsCorrect" value="${counter.count}" />
+                                </td>
+                            </tr>
+                        </c:forEach>
 
                     </tbody>
                 </table>
             </div>
 
             <div class="text-center text-muted">
-                <input class="btn btn-success" style="padding:5px 40px; margin-bottom: 30px"type="submit" name="btAction" value="Create"/>
+                <input class="btn btn-success" style="padding:5px 40px; margin-bottom: 30px"type="submit" name="btAction" value="Update"/>
             </div>
-
+            
         </form>
     </body>
 </html>

@@ -98,5 +98,24 @@ public class SubjectDAO implements Serializable {
         }
         return null;
     }
+    
+    public String getSubjectNameFromID(String subjectID) 
+            throws NamingException, SQLException{
+        try{
+            cn = DBHelpers.makeConnection();
+            if(cn!=null){
+                String sql = "SELECT subjectName FROM Subject WHERE subjectID = ?";
+                pst = cn.prepareStatement(sql);
+                pst.setString(1, subjectID);
+                rs = pst.executeQuery();
+                if(rs.next()){
+                    return rs.getString("subjectName");
+                }
+            }
+        }finally{
+            closeConnection();
+        }
+        return null;
+    }
 
 }

@@ -7,6 +7,8 @@ package thunb.servlets;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
@@ -19,16 +21,15 @@ import thunb.dao.AnswerOfQuesDAO;
 import thunb.dao.QuestionDAO;
 import thunb.dao.SubjectDAO;
 import thunb.dto.AnswerOfQuesDTO;
-import thunb.dto.QuestionDTO;
-import thunb.question.QuestionObject;
 import thunb.utils.ConstantsKey;
+import thunb.utils.Utilities;
 
 /**
  *
  * @author Banh Bao
  */
-@WebServlet(name = "SearchServlet", urlPatterns = {"/SearchServlet"})
-public class SearchServlet extends HttpServlet {
+@WebServlet(name = "UpdateQuestionServlet", urlPatterns = {"/UpdateQuestionServlet"})
+public class UpdateQuestionServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,60 +44,70 @@ public class SearchServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
-        String url = ConstantsKey.ADMIN_PAGE;
+        String url = ConstantsKey.UPDATE_PAGE;
         try {
             String txtSubject = request.getParameter("txtSubject");
             String txtStatus = request.getParameter("txtStatus");
-            String txtSearchValue = request.getParameter("txtSearchValue");
-
-            if (!txtSubject.trim().isEmpty()
-                    || !txtStatus.trim().isEmpty()
-                    || !txtSearchValue.trim().isEmpty()) {
-
-                QuestionObject quesObj = null;
-
-                String subjectID = "";
-                if (!txtSubject.trim().isEmpty()) {
-                    SubjectDAO subDAO = new SubjectDAO();
-                    subjectID = subDAO.getSubjectIDFromName(txtSubject);
-                }
+            String txtQuestion = request.getParameter("txtQuestion");
+            String txtAns1 = request.getParameter("txtAns1");
+            String txtAns2 = request.getParameter("txtAns2");
+            String txtAns3 = request.getParameter("txtAns3");
+            String txtAns4 = request.getParameter("txtAns4");
+            String rdAnsCorrect = request.getParameter("rdAnsCorrect");
+            String txtQuestionID = request.getParameter("txtQuestionID");
+            //
+            if (txtQuestionID != null && !txtQuestionID.trim().isEmpty()) {
+                int quesID = Integer.parseInt(txtQuestionID);
                 boolean status = true;
-                if (!txtStatus.trim().isEmpty()) {
+                if (txtStatus != null && !txtStatus.trim().isEmpty()) {
                     if (txtStatus.equals("Deactive")) {
                         status = false;
                     }
                 }
+
+                int ansCorrect = Integer.parseInt(rdAnsCorrect);
+
+                SubjectDAO subDAO = new SubjectDAO();
+                String subjectID = subDAO.getSubjectIDFromName(txtSubject);
                 //
-                QuestionDAO dao = new QuestionDAO();
-                int rs = dao.searchQuestion(subjectID, txtSearchValue, status);
-                if (rs > 0) {
-                    quesObj = new QuestionObject();
+                AnswerOfQuesDAO ansDAO = new AnswerOfQuesDAO();
+                int rs = ansDAO.searchAnsByQuestionID(quesID);
+                if (rs == 4) {
+                    List<AnswerOfQuesDTO> listAns = ansDAO.getListAns();
+                    listAns.get(0).setAnsContent(txtAns1);
+                    listAns.get(1).setAnsContent(txtAns2);
+                    listAns.get(2).setAnsContent(txtAns3);
+                    listAns.get(3).setAnsContent(txtAns4);
 
-                    List<QuestionDTO> listQues = dao.getListQues();
+                    listAns.get(0).setIsTrue(false);
+                    listAns.get(1).setIsTrue(false);
+                    listAns.get(2).setIsTrue(false);
+                    listAns.get(3).setIsTrue(false);
 
-                    for (QuestionDTO ques : listQues) {
-                        AnswerOfQuesDAO ansDAO = new AnswerOfQuesDAO();
-                        int rsAns = ansDAO.searchAnsByQuestionID(ques.getQuesID());
-                        if (rsAns == 4) {
-                            List<AnswerOfQuesDTO> listAns = ansDAO.getListAns();
-                            quesObj.getQues().put(ques.getQuesContent(), listAns);
+                    for (int i = 1; i < 5; i++) {
+                        if (ansCorrect == i) {
+                            listAns.get(i - 1).setIsTrue(true);
                         }
                     }
 
+                    //
+                    Timestamp createDate = Utilities.getCurrentTime();
+                    QuestionDAO dao = new QuestionDAO();
+                    boolean result = dao.updateQuestion(quesID, txtQuestion, createDate, subjectID, status, listAns);
+                    if (result) {
+                        request.setAttribute("UPDATE_SUCCESS", "OK");
+                        url = ConstantsKey.ADMIN_PAGE;
+                    } else {
+                        request.setAttribute("UPDATE_FAIL", "FAIL");
+                    }
                 }
 
-                if (quesObj != null) {
-
-                    request.setAttribute("LIST_QUESTION", quesObj);
-                }
-            } else {
-                request.setAttribute("NOTI", "Please input info before press Search button!");
             }
 
         } catch (NamingException ex) {
-            log("SearchServlet_NamingException:" + ex.getMessage());
+            log("UpdateQuestionServlet_NamingException:" + ex.getMessage());
         } catch (SQLException ex) {
-            log("SearchServlet_SQLException:" + ex.getMessage());
+            log("UpdateQuestionServlet_SQLException:" + ex.getMessage());
         } finally {
             RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);

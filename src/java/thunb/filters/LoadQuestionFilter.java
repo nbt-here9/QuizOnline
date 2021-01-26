@@ -17,15 +17,18 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import thunb.dao.AnswerOfQuesDAO;
+import thunb.dao.QuestionDAO;
+import thunb.dao.SubjectDAO;
 import thunb.dto.AnswerOfQuesDTO;
-import thunb.errors.CreateError;
+import thunb.dto.QuestionDTO;
 import thunb.utils.ConstantsKey;
 
 /**
  *
  * @author Banh Bao
  */
-public class CreateQuestionFilter implements Filter {
+public class LoadQuestionFilter implements Filter {
 
     private static final boolean debug = true;
 
@@ -34,12 +37,12 @@ public class CreateQuestionFilter implements Filter {
     // configured. 
     private FilterConfig filterConfig = null;
 
-    public CreateQuestionFilter() {
+    public LoadQuestionFilter() {
     }
 
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
-        //if (debug) log("CreateQuestionFilter:DoBeforeProcessing");
+        //if (debug) log("LoadQuestionFilter:DoBeforeProcessing");
 
         // Write code here to process the request and/or response before
         // the rest of the filter chain is invoked.
@@ -65,7 +68,7 @@ public class CreateQuestionFilter implements Filter {
 
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
-        //if (debug) log("CreateQuestionFilter:DoAfterProcessing");
+        //if (debug) log("LoadQuestionFilter:DoAfterProcessing");
 
         // Write code here to process the request and/or response after
         // the rest of the filter chain is invoked.
@@ -100,7 +103,7 @@ public class CreateQuestionFilter implements Filter {
             throws IOException, ServletException {
 
         if (debug) {
-            log("CreateQuestionFilter:doFilter()");
+            log("LoadQuestionFilter:doFilter()");
         }
 
         doBeforeProcessing(request, response);
@@ -108,89 +111,40 @@ public class CreateQuestionFilter implements Filter {
         Throwable problem = null;
 
         try {
-            String url = "";
-            String txtSubject = request.getParameter("txtSubject");
-            String txtStatus = request.getParameter("txtStatus");
-            String txtQuestion = request.getParameter("txtQuestion");
-            String txtAns1 = request.getParameter("txtAns1");
-            String txtAns2 = request.getParameter("txtAns2");
-            String txtAns3 = request.getParameter("txtAns3");
-            String txtAns4 = request.getParameter("txtAns4");
-            String rdAnsCorrect = request.getParameter("rdAnsCorrect");
-            String btAction = request.getParameter("btAction");
+            String url = ConstantsKey.ADMIN_PAGE;
 
-            
-            
-            CreateError err = null;
+            String txtQuestionID = request.getParameter("txtQuestionID");
+            if (txtQuestionID != null && !txtQuestionID.trim().isEmpty()) {
+                int quesID = Integer.parseInt(txtQuestionID);
 
-            boolean valid = true;
-            if (txtSubject == null || txtSubject.trim().isEmpty()) {
-                valid = false;
-                if (err == null) {
-                    err = new CreateError();
-                }
-                err.setNoSubject("Subject can not empty!");
-            }
-            //
-            if (txtQuestion == null || txtQuestion.trim().isEmpty()) {
-                valid = false;
-                if (err == null) {
-                    err = new CreateError();
-                }
-                err.setNoQuestion("Question can not empty!");
-            }
-            //
-            if (txtAns1 == null || txtAns1.trim().isEmpty()) {
-                valid = false;
-                if (err == null) {
-                    err = new CreateError();
-                }
-                err.setNotEnoughFourAnwsers("Question has 4 answers!");
-            }
-            //
-            if (txtAns2 == null || txtAns2.trim().isEmpty()) {
-                valid = false;
-                if (err == null) {
-                    err = new CreateError();
-                }
-                err.setNotEnoughFourAnwsers("Question has 4 answers!");
-            }
-            //
-            if (txtAns3 == null || txtAns3.trim().isEmpty()) {
-                valid = false;
-                if (err == null) {
-                    err = new CreateError();
-                }
-                err.setNotEnoughFourAnwsers("Question has 4 answers!");
-            }
-            //
-            if (txtAns4 == null || txtAns4.trim().isEmpty()) {
-                valid = false;
-                if (err == null) {
-                    err = new CreateError();
-                }
-                err.setNotEnoughFourAnwsers("Question has 4 answers!");
-            }
-            //
-            if (rdAnsCorrect == null || rdAnsCorrect.trim().isEmpty()) {
-                valid = false;
-                if (err == null) {
-                    err = new CreateError();
-                }
-                err.setNotSetCorrectAnswer("Must to set correct answer for this question!");
-            }
-
-            if (valid) {
-                chain.doFilter(request, response);
-            } else {
-                request.setAttribute("CREATE_ERR", err);
-                if (btAction != null) {
-                    if ("Update".equals(btAction)) {
-                        url =ConstantsKey.UPDATE_PAGE;
-                    } else if ("Create".equals(btAction)) {
-                        url = ConstantsKey.CREATE_PAGE;
+                QuestionDAO dao = new QuestionDAO();
+                QuestionDTO dto = dao.getSelectedQuestion(quesID);
+                if (dto != null) {
+                    SubjectDAO subDAO = new SubjectDAO();
+                    String subjectName = subDAO.getSubjectNameFromID(dto.getSubjectID());
+                    String status = "Deactive";
+                    if (dto.isStatus()) {
+                        status = "Active";
                     }
+                    AnswerOfQuesDAO ansDAO = new AnswerOfQuesDAO();
+                    int rs = ansDAO.searchAnsByQuestionID(quesID);
+                    if (rs == 4) {
+                        List<AnswerOfQuesDTO> listAns = ansDAO.getListAns();
+                        request.setAttribute("ANS_LIST", listAns);
+                    }
+
+                    request.setAttribute("SUBJECT_NAME", subjectName);
+                    request.setAttribute("STATUS", status);
+                    request.setAttribute("QUES", dto);
+                    request.setAttribute("QUES_ID", txtQuestionID);
+
+                    chain.doFilter(request, response);
+                } else {
+                    RequestDispatcher rd = request.getRequestDispatcher(url);
+                    rd.forward(request, response);
                 }
+
+            } else {
                 RequestDispatcher rd = request.getRequestDispatcher(url);
                 rd.forward(request, response);
             }
@@ -247,7 +201,7 @@ public class CreateQuestionFilter implements Filter {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
             if (debug) {
-                log("CreateQuestionFilter:Initializing filter");
+                log("LoadQuestionFilter:Initializing filter");
             }
         }
     }
@@ -258,9 +212,9 @@ public class CreateQuestionFilter implements Filter {
     @Override
     public String toString() {
         if (filterConfig == null) {
-            return ("CreateQuestionFilter()");
+            return ("LoadQuestionFilter()");
         }
-        StringBuffer sb = new StringBuffer("CreateQuestionFilter(");
+        StringBuffer sb = new StringBuffer("LoadQuestionFilter(");
         sb.append(filterConfig);
         sb.append(")");
         return (sb.toString());

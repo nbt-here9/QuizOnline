@@ -9,3 +9,6 @@ DashBoard=dashboard.jsp
 Search=SearchServlet
 CreatePage=createQuestion.jsp
 Create=CreateQuestionServlet
+UpdatePage=update.jsp
+Update=UpdateQuestionServlet
+Delete=DeleteQuestionServlet

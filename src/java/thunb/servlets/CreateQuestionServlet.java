@@ -48,10 +48,10 @@ public class CreateQuestionServlet extends HttpServlet {
             String txtSubject = request.getParameter("txtSubject");
             String txtStatus = request.getParameter("txtStatus");
             String txtQuestion = request.getParameter("txtQuestion");
-            String txtAnsA = request.getParameter("txtAnsA");
-            String txtAnsB = request.getParameter("txtAnsB");
-            String txtAnsC = request.getParameter("txtAnsC");
-            String txtAnsD = request.getParameter("txtAnsD");
+            String txtAns1 = request.getParameter("txtAns1");
+            String txtAns2 = request.getParameter("txtAns2");
+            String txtAns3 = request.getParameter("txtAns3");
+            String txtAns4 = request.getParameter("txtAns4");
             String rdAnsCorrect = request.getParameter("rdAnsCorrect");
             //
             boolean status = true;
@@ -66,10 +66,10 @@ public class CreateQuestionServlet extends HttpServlet {
             SubjectDAO subDAO = new SubjectDAO();
             String subjectID = subDAO.getSubjectIDFromName(txtSubject);
             //
-            AnswerOfQuesDTO ansA = new AnswerOfQuesDTO(txtAnsA, false);
-            AnswerOfQuesDTO ansB = new AnswerOfQuesDTO(txtAnsB, false);
-            AnswerOfQuesDTO ansC = new AnswerOfQuesDTO(txtAnsC, false);
-            AnswerOfQuesDTO ansD = new AnswerOfQuesDTO(txtAnsD, false);
+            AnswerOfQuesDTO ansA = new AnswerOfQuesDTO(txtAns1, false);
+            AnswerOfQuesDTO ansB = new AnswerOfQuesDTO(txtAns2, false);
+            AnswerOfQuesDTO ansC = new AnswerOfQuesDTO(txtAns3, false);
+            AnswerOfQuesDTO ansD = new AnswerOfQuesDTO(txtAns4, false);
            
             List<AnswerOfQuesDTO> listAns = new ArrayList<>();
             listAns.add(ansA);
@@ -77,9 +77,9 @@ public class CreateQuestionServlet extends HttpServlet {
             listAns.add(ansC);
             listAns.add(ansD);
             
-            for (int i = 0; i < 4; i++) {
+            for (int i = 1; i < 5; i++) {
                 if (ansCorrect == i) {
-                    listAns.get(i).setIsTrue(true);
+                    listAns.get(i-1).setIsTrue(true);
                 }
             }
             //

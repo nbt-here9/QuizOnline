@@ -7,7 +7,8 @@ package thunb.servlets;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,20 +16,15 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import thunb.dao.AnswerOfQuesDAO;
 import thunb.dao.QuestionDAO;
-import thunb.dao.SubjectDAO;
-import thunb.dto.AnswerOfQuesDTO;
-import thunb.dto.QuestionDTO;
-import thunb.question.QuestionObject;
 import thunb.utils.ConstantsKey;
 
 /**
  *
  * @author Banh Bao
  */
-@WebServlet(name = "SearchServlet", urlPatterns = {"/SearchServlet"})
-public class SearchServlet extends HttpServlet {
+@WebServlet(name = "DeleteQuestionServlet", urlPatterns = {"/DeleteQuestionServlet"})
+public class DeleteQuestionServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,59 +40,27 @@ public class SearchServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         String url = ConstantsKey.ADMIN_PAGE;
+        boolean rs = false;
         try {
-            String txtSubject = request.getParameter("txtSubject");
-            String txtStatus = request.getParameter("txtStatus");
-            String txtSearchValue = request.getParameter("txtSearchValue");
+//            String txtSubject = request.getParameter("txtSubject");
+//            String txtStatus = request.getParameter("txtStatus");
+//            String txtSearchValue = request.getParameter("txtSearchValue");
+            String txtQuestionID = request.getParameter("txtQuestionID");
 
-            if (!txtSubject.trim().isEmpty()
-                    || !txtStatus.trim().isEmpty()
-                    || !txtSearchValue.trim().isEmpty()) {
+            if (txtQuestionID != null && !txtQuestionID.trim().isEmpty()) {
+                int quesID = Integer.parseInt(txtQuestionID);
 
-                QuestionObject quesObj = null;
-
-                String subjectID = "";
-                if (!txtSubject.trim().isEmpty()) {
-                    SubjectDAO subDAO = new SubjectDAO();
-                    subjectID = subDAO.getSubjectIDFromName(txtSubject);
-                }
-                boolean status = true;
-                if (!txtStatus.trim().isEmpty()) {
-                    if (txtStatus.equals("Deactive")) {
-                        status = false;
-                    }
-                }
-                //
                 QuestionDAO dao = new QuestionDAO();
-                int rs = dao.searchQuestion(subjectID, txtSearchValue, status);
-                if (rs > 0) {
-                    quesObj = new QuestionObject();
-
-                    List<QuestionDTO> listQues = dao.getListQues();
-
-                    for (QuestionDTO ques : listQues) {
-                        AnswerOfQuesDAO ansDAO = new AnswerOfQuesDAO();
-                        int rsAns = ansDAO.searchAnsByQuestionID(ques.getQuesID());
-                        if (rsAns == 4) {
-                            List<AnswerOfQuesDTO> listAns = ansDAO.getListAns();
-                            quesObj.getQues().put(ques.getQuesContent(), listAns);
-                        }
-                    }
-
+                rs = dao.updateStatusQuestion(quesID, false);
+                if (rs) {
+                    request.setAttribute("REMOVE_SUCCESS", "Delete Successfully! (Meaning update the status of the Question to Deactive)");
                 }
-
-                if (quesObj != null) {
-
-                    request.setAttribute("LIST_QUESTION", quesObj);
-                }
-            } else {
-                request.setAttribute("NOTI", "Please input info before press Search button!");
             }
 
-        } catch (NamingException ex) {
-            log("SearchServlet_NamingException:" + ex.getMessage());
         } catch (SQLException ex) {
-            log("SearchServlet_SQLException:" + ex.getMessage());
+            log("DeleteQuestionServlet_SQLException:" + ex.getMessage());
+        } catch (NamingException ex) {
+            log("DeleteQuestionServlet_NamingException:" + ex.getMessage());
         } finally {
             RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);

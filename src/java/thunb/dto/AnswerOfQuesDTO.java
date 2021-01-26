@@ -16,6 +16,7 @@ public class AnswerOfQuesDTO implements Serializable {
     private  String ansContent;
     private int quesID;
     private boolean isTrue;
+   
 
     public AnswerOfQuesDTO() {
     }
@@ -31,6 +32,8 @@ public class AnswerOfQuesDTO implements Serializable {
         this.quesID = quesID;
         this.isTrue = isTrue;
     }
+
+    
 
     /**
      * @return the ansID
@@ -87,6 +90,11 @@ public class AnswerOfQuesDTO implements Serializable {
     public void setIsTrue(boolean isTrue) {
         this.isTrue = isTrue;
     }
+
+   
+
+    
+    
     
     
 }
