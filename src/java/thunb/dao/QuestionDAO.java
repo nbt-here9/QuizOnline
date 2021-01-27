@@ -180,7 +180,6 @@ public class QuestionDAO {
         return dto;
     }
 
-    
     public boolean updateQuestion(int quesID, String quesContent,
             Timestamp createDate, String subjectID, boolean status, List<AnswerOfQuesDTO> listAns)
             throws SQLException, NamingException {
@@ -207,12 +206,12 @@ public class QuestionDAO {
                 //Update into AnswerOfQues
                 if (check) {
 
-                        AnswerOfQuesDAO dao = new AnswerOfQuesDAO();
-                        if (dao.updateAnswerOfQuestion(cn, quesID, listAns)) {
-                            cn.commit();
-                            return true;
-                        }
-                    
+                    AnswerOfQuesDAO dao = new AnswerOfQuesDAO();
+                    if (dao.updateAnswerOfQuestion(cn, quesID, listAns)) {
+                        cn.commit();
+                        return true;
+                    }
+
                 }
             }
         } catch (SQLException e) {
@@ -234,7 +233,7 @@ public class QuestionDAO {
         }
         return false;
     }
-    
+
     public boolean updateStatusQuestion(int quesID, boolean status) throws SQLException, NamingException {
         try {
             cn = DBHelpers.makeConnection();
@@ -254,4 +253,6 @@ public class QuestionDAO {
         }
         return false;
     }
+
+    
 }

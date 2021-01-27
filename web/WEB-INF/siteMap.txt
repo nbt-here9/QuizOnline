@@ -12,3 +12,5 @@ Create=CreateQuestionServlet
 UpdatePage=update.jsp
 Update=UpdateQuestionServlet
 Delete=DeleteQuestionServlet
+TakeAQuiz=TakeAQuizServlet
+TakeAQuizPage=takeAQuiz.jsp
