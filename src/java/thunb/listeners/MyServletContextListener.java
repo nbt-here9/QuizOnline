@@ -36,7 +36,6 @@ public class MyServletContextListener implements javax.servlet.ServletContextLis
             while (br.ready()) {
                 String line = br.readLine();
                 indexPage.put(line.split("=")[0], line.split("=")[1]);
-                System.out.println(line);
             } //end if EOF
 
         } catch (FileNotFoundException ex) {

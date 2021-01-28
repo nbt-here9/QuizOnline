@@ -27,49 +27,59 @@
         <h2 class="text-center text-muted">
             <c:if test="${not empty sessionScope.SUBJECT_NAME}">${sessionScope.SUBJECT_NAME}</c:if> Quiz
             </h2>
-        <c:if test="${not empty sessionScope.LIST_QUES_FOR_QUIZ}">
 
-            <h3 class="counter-time" id="quiz-time-left"></h3>
+            <c:if test="${not empty requestScope.SCORE && not empty requestScope.NUM_OF_CORRECT}">
+                <div class="alert alert-success alert-dismissible mt-3 mb-3 ml-3 mr-3 text-center">
+                    Number of correct: ${requestScope.NUM_OF_CORRECT} / ${sessionScope.NUM_OF_QUES}
+                    <br>Point: ${requestScope.SCORE}
+                </div>
+            </c:if>
+            
+        <c:if test="${empty requestScope.SCORE}">
 
-            <form action="SubmitQuiz" name="quiz" method="POST">
-                <div class="container">
-                    <div class="quiz-form pt-2">
+            <c:if test="${not empty sessionScope.LIST_QUES_FOR_QUIZ}">
 
-                        <c:forEach var="question" items="${sessionScope.LIST_QUES_FOR_QUIZ.ques}" varStatus="counter">
-                            <div class="paginate">
-                                <table class="table table-hover">
-                                    <thead class="thead-light">
-                                        <tr>
-                                            <th colspan="2">Q${counter.count}: ${question.key} </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <c:forEach var="answer" items="${question.value}" varStatus="counterAns">
+                <h3 class="counter-time" id="quiz-time-left"></h3>
 
+                <form action="SubmitQuiz" name="quiz" method="POST">
+                    <div class="container">
+                        <div class="quiz-form pt-2">
+
+                            <c:forEach var="question" items="${sessionScope.LIST_QUES_FOR_QUIZ.ques}" varStatus="counter">
+                                <div class="paginate">
+                                    <table class="table table-hover">
+                                        <thead class="thead-light">
                                             <tr>
-                                                <td width="8%">
-                                                    <input type="radio" name="rdAnsCorrect${counter.count}" value="${counterAns.count}" />
-                                                </td>
-                                                <td>${answer.ansContent}</td>
+                                                <th colspan="2">Q${counter.count}: ${question.key} </th>
                                             </tr>
-                                        </c:forEach>
+                                        </thead>
+                                        <tbody>
+                                            <c:forEach var="answer" items="${question.value}" varStatus="counterAns">
 
-                                    </tbody>
-                                </table>
-                            </div>
+                                                <tr>
+                                                    <td width="8%">
+                                                        <input type="radio" name="rdAnsCorrect${counter.count}" value="${counterAns.count}" />
+                                                    </td>
+                                                    <td>${answer.ansContent}</td>
+                                                </tr>
+                                            </c:forEach>
 
-                        </c:forEach>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </c:forEach>
+
+                        </div>
 
                     </div>
-
-                </div>
-                <div id="page-nav"></div> 
-                <div class="text-center text-muted">
-                    <input class="btn btn-success" style="padding:5px 40px; margin-bottom: 30px"type="submit" name="" value="Submit"/>
-                </div>
-            </form>
+                    <div id="page-nav"></div> 
+                    <div class="text-center text-muted">
+                        <input class="btn btn-success" style="padding:5px 40px; margin-bottom: 30px"type="submit" name="" value="Submit"/>
+                    </div>
+                </form>
+            </c:if>
         </c:if>
-
         <script>
             var total_seconds = 60 *${sessionScope.TIME};
             var c_minutes = parseInt(total_seconds / 60);
