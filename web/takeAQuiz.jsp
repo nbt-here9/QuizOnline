@@ -29,49 +29,64 @@
             </h2>
         <c:if test="${not empty sessionScope.LIST_QUES_FOR_QUIZ}">
 
-            <h2 class="counter-time" id="showtime"></h2>
+            <h3 class="counter-time" id="quiz-time-left"></h3>
 
-            <div class="container">
-                <div class="quiz-form pt-2">
+            <form action="SubmitQuiz" name="quiz" method="POST">
+                <div class="container">
+                    <div class="quiz-form pt-2">
 
-                    <c:forEach var="question" items="${sessionScope.LIST_QUES_FOR_QUIZ.ques}" varStatus="counter">
-                        <div class="paginate">
-                            <table class="table table-hover">
-                                <thead class="thead-light">
-                                    <tr>
-                                        <th colspan="2"> ${question.key} </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <c:forEach var="answer" items="${question.value}" varStatus="counterAns">
-
+                        <c:forEach var="question" items="${sessionScope.LIST_QUES_FOR_QUIZ.ques}" varStatus="counter">
+                            <div class="paginate">
+                                <table class="table table-hover">
+                                    <thead class="thead-light">
                                         <tr>
-                                            <td width="8%">
-                                                <input type="radio" name="rdAnsCorrect${counterAns.count}" value="${counterAns.count}" />
-                                                <c:if test="${answer.isTrue}">
-
-                                                </c:if>
-
-                                                <c:if test="${not answer.isTrue}">
-
-                                                </c:if>
-                                            </td>
-                                            <td>${answer.ansContent}</td>
+                                            <th colspan="2">Q${counter.count}: ${question.key} </th>
                                         </tr>
-                                    </c:forEach>
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach var="answer" items="${question.value}" varStatus="counterAns">
 
-                                </tbody>
-                            </table>
-                        </div>
+                                            <tr>
+                                                <td width="8%">
+                                                    <input type="radio" name="rdAnsCorrect${counter.count}" value="${counterAns.count}" />
+                                                </td>
+                                                <td>${answer.ansContent}</td>
+                                            </tr>
+                                        </c:forEach>
 
-                    </c:forEach>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </c:forEach>
+
+                    </div>
 
                 </div>
-
-            </div>
-            <div id="page-nav"></div>
-
+                <div id="page-nav"></div> 
+                <div class="text-center text-muted">
+                    <input class="btn btn-success" style="padding:5px 40px; margin-bottom: 30px"type="submit" name="" value="Submit"/>
+                </div>
+            </form>
         </c:if>
 
+        <script>
+            var total_seconds = 60 *${sessionScope.TIME};
+            var c_minutes = parseInt(total_seconds / 60);
+            var c_seconds = parseInt(total_seconds % 60);
+            function CheckTime() {
+                document.getElementById("quiz-time-left").innerHTML
+                        = 'Time Left: ' + c_minutes + "m:" + c_seconds + "s";
+                if (total_seconds <= 0) {
+                    setTimeout('document.quiz.submit()', 1);
+                } else {
+                    total_seconds = total_seconds - 1;
+                    c_minutes = parseInt(total_seconds / 60);
+                    c_seconds = parseInt(total_seconds % 60);
+                    setTimeout("CheckTime()", 1000);
+                }
+            }
+            setTimeout("CheckTime()", 1000);
+        </script>
     </body>
 </html>

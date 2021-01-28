@@ -49,5 +49,9 @@ tbody{
     margin: auto;
     display: table;
 }
- 
+
+#quiz-time-left {
+    color:  #28a745;
+}
+
 
