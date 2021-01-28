@@ -30,8 +30,9 @@
 
             <c:if test="${not empty requestScope.SCORE && not empty requestScope.NUM_OF_CORRECT}">
                 <div class="alert alert-success alert-dismissible mt-3 mb-3 ml-3 mr-3 text-center">
-                    Number of correct: ${requestScope.NUM_OF_CORRECT} / ${sessionScope.NUM_OF_QUES}
-                    <br>Point: ${requestScope.SCORE}
+                    Number of correct: ${requestScope.NUM_OF_CORRECT} / ${sessionScope.NUM_OF_QUES}<br>
+                    Point: ${requestScope.SCORE}<br>
+                    <a href="DashBoard" class="btn btn-success" style="padding:5px 40px; margin-top: 20px">Back to DashBoard</a>
                 </div>
             </c:if>
             

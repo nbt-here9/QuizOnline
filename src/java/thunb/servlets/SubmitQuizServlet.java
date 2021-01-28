@@ -7,9 +7,14 @@ package thunb.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,9 +22,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import thunb.dao.HistoryDAO;
 import thunb.dto.AnswerOfQuesDTO;
+import thunb.dto.UsersDTO;
 import thunb.question.QuestionObject;
 import thunb.utils.ConstantsKey;
+import thunb.utils.Utilities;
 
 /**
  *
@@ -40,7 +48,6 @@ public class SubmitQuizServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
 
         String url = ConstantsKey.DASHBOARD_PAGE;
         try {
@@ -90,15 +97,33 @@ public class SubmitQuizServlet extends HttpServlet {
                             }
                         }
                     }
-
+                    //
                     double totalScore = Math.round(numOfCorrectAnswer / numOfQues * 10 * 100) / 100.0d;
-                    
-                    request.setAttribute("NUM_OF_CORRECT", numOfCorrectAnswer);
+                    //
+                    UsersDTO userLogin = (UsersDTO) session.getAttribute("LOGIN_USER");
+                    String subjectID = (String) session.getAttribute("SUBJECT_ID");
+                    Timestamp startTime = (Timestamp) session.getAttribute("START_TIME");
+                    Timestamp endTime = Utilities.getCurrentTime();
+
+                    HistoryDAO historyDAO = new HistoryDAO();
+                    historyDAO.insertHistory(userLogin.getEmail(), subjectID, totalScore, startTime, endTime);
+                    //
+                    request.setAttribute("NUM_OF_CORRECT", (int) numOfCorrectAnswer);
                     request.setAttribute("SCORE", totalScore);
                     url = ConstantsKey.TAKE_A_QUIZ_PAGE;
+                    //
+                    session.removeAttribute("SUBJECT_ID");
+                    session.removeAttribute("SUBJECT_NAME");
+                    session.removeAttribute("TIME");
+                    session.removeAttribute("LIST_QUES_FOR_QUIZ");
+                    session.removeAttribute("START_TIME");
                 }
             }
 
+        } catch (SQLException ex) {
+            log("SubmitQuizServlet_SQLException:" + ex.getMessage());
+        } catch (NamingException ex) {
+            log("SubmitQuizServlet_NamingException:" + ex.getMessage());
         } finally {
             RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);

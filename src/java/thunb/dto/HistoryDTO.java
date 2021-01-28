@@ -16,14 +16,14 @@ public class HistoryDTO implements Serializable {
     private int ID;
     private String userEmail;
     private String subjectID;
-    private int score;
+    private double score;
     private Timestamp startTime;
     private Timestamp endTime;
 
     public HistoryDTO() {
     }
 
-    public HistoryDTO(int ID, String userEmail, String subjectID, int score, Timestamp startTime, Timestamp endTime) {
+    public HistoryDTO(int ID, String userEmail, String subjectID, double score, Timestamp startTime, Timestamp endTime) {
         this.ID = ID;
         this.userEmail = userEmail;
         this.subjectID = subjectID;
@@ -77,14 +77,14 @@ public class HistoryDTO implements Serializable {
     /**
      * @return the score
      */
-    public int getScore() {
+    public double getScore() {
         return score;
     }
 
     /**
      * @param score the score to set
      */
-    public void setScore(int score) {
+    public void setScore(double score) {
         this.score = score;
     }
 
@@ -117,4 +117,5 @@ public class HistoryDTO implements Serializable {
     }
     
     
+
 }

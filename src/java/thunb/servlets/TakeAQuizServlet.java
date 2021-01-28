@@ -7,6 +7,7 @@ package thunb.servlets;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import javax.naming.NamingException;
@@ -92,10 +93,14 @@ public class TakeAQuizServlet extends HttpServlet {
                             }
 
                             HttpSession session = request.getSession(false);
+                            session.setAttribute("SUBJECT_ID", txtSubjectID);
                             session.setAttribute("SUBJECT_NAME", txtSubjectName);
                             session.setAttribute("TIME", timeOfQuiz);
                             session.setAttribute("LIST_QUES_FOR_QUIZ", quesObj);
                             session.setAttribute("NUM_OF_QUES", numOfQues);
+
+                            Timestamp startTime = Utilities.getCurrentTime();
+                            session.setAttribute("START_TIME", startTime);
 
                             url = ConstantsKey.TAKE_A_QUIZ_PAGE;
                         }
