@@ -15,5 +15,5 @@ Delete=DeleteQuestionServlet
 TakeAQuiz=TakeAQuizServlet
 TakeAQuizPage=takeAQuiz.jsp
 HistoryPage=history.jsp
-History=ViewHistoryServlet
 SubmitQuiz=SubmitQuizServlet
+SearchHistory=ViewHistoryServlet

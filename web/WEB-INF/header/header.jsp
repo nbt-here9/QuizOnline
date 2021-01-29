@@ -46,6 +46,16 @@
                             </a>
                         </li>
                     </c:if>
+                        
+                        <c:if test="${sessionScope.LOGIN_USER.role eq 0}">
+                        <li class="nav-item">
+                            <a class="nav-link">
+                                <a href="HistoryPage" class="btn btn-outline-light">
+                                    <font style="color: #ffffff;">History</font>
+                                </a>
+                            </a>
+                        </li>
+                    </c:if>
                 </ul>
                 <span class="navbar-text">
                     <ul class="navbar-nav mr-auto">

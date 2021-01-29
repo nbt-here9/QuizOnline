@@ -13,7 +13,6 @@ import java.sql.Timestamp;
  * @author Banh Bao
  */
 public class HistoryDTO implements Serializable {
-    private int ID;
     private String userEmail;
     private String subjectID;
     private double score;
@@ -23,8 +22,7 @@ public class HistoryDTO implements Serializable {
     public HistoryDTO() {
     }
 
-    public HistoryDTO(int ID, String userEmail, String subjectID, double score, Timestamp startTime, Timestamp endTime) {
-        this.ID = ID;
+    public HistoryDTO(String userEmail, String subjectID, double score, Timestamp startTime, Timestamp endTime) {
         this.userEmail = userEmail;
         this.subjectID = subjectID;
         this.score = score;
@@ -32,19 +30,7 @@ public class HistoryDTO implements Serializable {
         this.endTime = endTime;
     }
 
-    /**
-     * @return the ID
-     */
-    public int getID() {
-        return ID;
-    }
 
-    /**
-     * @param ID the ID to set
-     */
-    public void setID(int ID) {
-        this.ID = ID;
-    }
 
     /**
      * @return the userEmail

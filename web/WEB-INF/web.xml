@@ -41,6 +41,12 @@
     </filter-mapping>
     <filter-mapping>
         <filter-name>LoadSubjectFilter</filter-name>
+        <url-pattern>/history.jsp</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>LoadSubjectFilter</filter-name>
         <url-pattern>/update.jsp</url-pattern>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>

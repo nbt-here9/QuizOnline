@@ -10,8 +10,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import javax.naming.NamingException;
-import thunb.utils.ConstantsKey;
+import thunb.dto.HistoryDTO;
 import thunb.utils.DBHelpers;
 
 /**
@@ -41,27 +43,63 @@ public class HistoryDAO {
             cn.close();
         }
     }
-    
-    public boolean insertHistory(String userEmail, String subjectID, double score, Timestamp startTime, Timestamp endTime) 
-            throws SQLException, NamingException{
+
+    public boolean insertHistory(String userEmail, String subjectID, double score, Timestamp startTime, Timestamp endTime)
+            throws SQLException, NamingException {
         boolean result = false;
-        try{
+        try {
             cn = DBHelpers.makeConnection();
-            if(cn!=null){
+            if (cn != null) {
                 String sql = "INSERT INTO History ( userEmail ,subjectID ,"
                         + "score ,startTime ,endTime ) VALUES  (?,?,?,?,?)";
-                pst=cn.prepareStatement(sql);
-                
-                pst.setString(1,userEmail);
+                pst = cn.prepareStatement(sql);
+
+                pst.setString(1, userEmail);
                 pst.setString(2, subjectID);
                 pst.setDouble(3, score);
                 pst.setTimestamp(4, startTime);
                 pst.setTimestamp(5, endTime);
-                
+
                 result = pst.executeUpdate() > 0;
-               
+
             }
-        }finally{
+        } finally {
+            closeConnection();
+        }
+        return result;
+    }
+
+    private List<HistoryDTO> listHistory = null;
+
+    public List<HistoryDTO> getListHistory() {
+        return listHistory;
+    }
+
+    public boolean searchHistory(String userEmail, String subjectID)
+            throws SQLException, NamingException {
+        boolean result = false;
+        try {
+            cn = DBHelpers.makeConnection();
+            if (cn != null) {
+                String sql = "SELECT score, startTime, endTime "
+                        + "FROM History WHERE userEmail = ? AND subjectID = ?";
+                pst = cn.prepareStatement(sql);
+                pst.setString(1, userEmail);
+                pst.setString(2, subjectID);
+                rs = pst.executeQuery();
+                while (rs.next()) {
+                    if (this.listHistory == null) {
+                        this.listHistory = new ArrayList<>();
+                    }
+                    double score = rs.getFloat("score");
+                    Timestamp startTime = rs.getTimestamp("startTime");
+                    Timestamp endTime = rs.getTimestamp("endTime");
+                    HistoryDTO dto = new HistoryDTO(userEmail, subjectID, score, startTime, endTime);
+                    this.listHistory.add(dto);
+                    result = true;
+                }
+            }
+        } finally {
             closeConnection();
         }
         return result;
