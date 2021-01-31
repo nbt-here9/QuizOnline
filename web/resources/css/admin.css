@@ -47,7 +47,7 @@ tbody{
 }*/
 #page-nav {
     margin: auto;
-    display: table;
+    display: table !important;
 }
 
 #quiz-time-left {

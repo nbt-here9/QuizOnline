@@ -14,11 +14,9 @@
         <link rel="stylesheet" type="text/css" href="resources/css/admin.css">
         <link rel="stylesheet" type="text/css" href="resources/css/simplePagination.css">
 
-
         <script src="resources/js/jquery-3.5.1.min.js"></script>
         <script src="resources/js/jquery.simplePagination.js"></script>
         <script src="resources/js/pagination.js"></script>
-
 
         <title>Quiz Now</title>
     </head>
@@ -42,6 +40,7 @@
 
                 <h3 class="counter-time" id="quiz-time-left"></h3>
 
+                <div id="page-nav"></div> 
                 <form action="SubmitQuiz" name="quiz" method="POST">
                     <div class="container">
                         <div class="quiz-form pt-2">
@@ -74,7 +73,7 @@
                         </div>
 
                     </div>
-                    <div id="page-nav"></div> 
+                    
                     <div class="text-center text-muted">
                         <input class="btn btn-success" style="padding:5px 40px; margin-bottom: 30px"type="submit" name="" value="Submit"/>
                     </div>
@@ -82,7 +81,7 @@
             </c:if>
         </c:if>
         <script>
-            var total_seconds = 60 *${sessionScope.TIME};
+            var total_seconds = 60*${sessionScope.TIME};
             var c_minutes = parseInt(total_seconds / 60);
             var c_seconds = parseInt(total_seconds % 60);
             function CheckTime() {

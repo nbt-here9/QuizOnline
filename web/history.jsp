@@ -12,6 +12,8 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" type="text/css" href="resources/css/jquery-ui.css">
         <link rel="stylesheet" type="text/css" href="resources/css/admin.css">
+
+
         <title>History</title>
     </head>
     <body>
@@ -39,16 +41,25 @@
             </div>
 
         </form>
-        
+
         <c:if test="${not empty requestScope.LIST_HISTORY}">
             <c:forEach var="history" items="${requestScope.LIST_HISTORY}">
+
                 <div class="alert alert-success alert-dismissible mt-3 mb-3 ml-3 mr-3 text-center" style="margin: 1rem 15rem 1rem 15rem !important">
                     <strong>Score:${history.score} <br></strong> 
                     <strong>Date:</strong> ${history.startTime} - ${history.endTime}
                 </div>
+
             </c:forEach>
+
         </c:if>
-        
+
+
+        <c:if test="${empty requestScope.LIST_HISTORY && not empty param.txtSubject}">
+            <div class="alert alert-success alert-dismissible mt-3 mb-3 ml-3 mr-3 text-center" style="margin: 1rem 15rem 1rem 15rem !important">
+                YOU DID NOT HAVE ANY QUIZ OF THIS SUBJECT!
+            </div>
+        </c:if>
 
     </body>
 </html>

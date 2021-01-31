@@ -80,7 +80,7 @@
 
             <div class="text-center text-muted">
                 <strong>Question: </strong><br>
-                <textarea name="txtQuestion" rows="4" cols="90">${requestScope.QUES.quesContent}</textarea>
+                <textarea name="txtQuestion" rows="4" cols="90">${param.txtQuestion}</textarea>
             </div>
             <br>
 
@@ -98,25 +98,25 @@
                             <td width="8%">
                                 <input type="radio" name="rdAnsCorrect" value="1" />
                             </td>
-                            <td><input type="text" name="txtAns1" value="${param.txtAnsA}" style="width: 550px"/></td>
+                            <td><input type="text" name="txtAns1" value="${param.txtAns1}" style="width: 550px"/></td>
                         </tr>
                         <tr>
                             <td width="8%">
                                 <input type="radio" name="rdAnsCorrect" value="2" />
                             </td>
-                            <td><input type="text" name="txtAns2" value="${param.txtAnsB}" style="width: 550px"/></td>
+                            <td><input type="text" name="txtAns2" value="${param.txtAns2}" style="width: 550px"/></td>
                         </tr>
                         <tr>
                             <td width="8%">
                                 <input type="radio" name="rdAnsCorrect" value="3" />
                             </td>
-                            <td><input type="text" name="txtAns3" value="${param.txtAnsC}" style="width: 550px"/></td>
+                            <td><input type="text" name="txtAns3" value="${param.txtAns3}" style="width: 550px"/></td>
                         </tr>
                         <tr>
                             <td width="8%">
                                 <input type="radio" name="rdAnsCorrect" value="4" />
                             </td>
-                            <td><input type="text" name="txtAns4" value="${param.txtAnsD}" style="width: 550px"/></td>
+                            <td><input type="text" name="txtAns4" value="${param.txtAns4}" style="width: 550px"/></td>
                         </tr>
 
                     </tbody>

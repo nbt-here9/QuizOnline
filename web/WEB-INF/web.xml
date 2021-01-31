@@ -20,7 +20,95 @@
         <filter-name>LoadQuestionFilter</filter-name>
         <filter-class>thunb.filters.LoadQuestionFilter</filter-class>
     </filter>
-
+    <filter>
+        <filter-name>CheckAccessAdminFilter</filter-name>
+        <filter-class>thunb.filters.CheckAccessAdminFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>CheckAccessStudentFilter</filter-name>
+        <filter-class>thunb.filters.CheckAccessStudentFilter</filter-class>
+    </filter>
+    
+    
+    
+    <filter-mapping>
+        <filter-name>CheckAccessStudentFilter</filter-name>
+        <url-pattern>/ViewHistoryServlet</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+     <filter-mapping>
+        <filter-name>CheckAccessStudentFilter</filter-name>
+        <url-pattern>/history.jsp</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CheckAccessStudentFilter</filter-name>
+        <url-pattern>/SubmitQuizServlet</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+     <filter-mapping>
+        <filter-name>CheckAccessStudentFilter</filter-name>
+        <url-pattern>/takeAQuiz.jsp</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+     <filter-mapping>
+        <filter-name>CheckAccessStudentFilter</filter-name>
+        <url-pattern>/TakeAQuizServlet</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CheckAccessStudentFilter</filter-name>
+        <url-pattern>/dashboard.jsp</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CheckAccessAdminFilter</filter-name>
+        <url-pattern>/DeleteQuestionServlet</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CheckAccessAdminFilter</filter-name>
+        <url-pattern>/UpdateQuestionServlet</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CheckAccessAdminFilter</filter-name>
+        <url-pattern>/update.jsp</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CheckAccessAdminFilter</filter-name>
+        <url-pattern>/CreateQuestionServlet</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CheckAccessAdminFilter</filter-name>
+        <url-pattern>/createQuestion.jsp</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CheckAccessAdminFilter</filter-name>
+        <url-pattern>/SearchServlet</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CheckAccessAdminFilter</filter-name>
+        <url-pattern>/admin.jsp</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
     <filter-mapping>
         <filter-name>CreateQuestionFilter</filter-name>
         <url-pattern>/UpdateQuestionServlet</url-pattern>
@@ -92,6 +180,10 @@
     <error-page>
         <error-code>503</error-code>
         <location>/503.html</location>
+    </error-page>
+    <error-page>
+        <error-code>403</error-code>
+        <location>/403.html</location>
     </error-page>
     <resource-ref>
         <res-ref-name>QuizOnline</res-ref-name>
